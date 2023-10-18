@@ -8,9 +8,21 @@ class TopController < ApplicationController
   end
   
   def login
-    if params[:uid] == "kindai" and params[:pass] == "sanriko"
+    logger.debug params[:uid]
+    if User.find_by(uid: params[:uid]) and User.find_by(pass: params[:pass])
+    #if params[:uid] == "kindai" and params[:pass] == "sanriko"
       session[:login_uid] = params[:uid]
       redirect_to top_main_path
+    
+    else
+      render "error"
+      #logger.debug "error"
+      #render plain: "エラーです"
     end
+  end
+  
+  def logout
+    session.delete(:login_uid)
+    redirect_to top_main_path
   end
 end
